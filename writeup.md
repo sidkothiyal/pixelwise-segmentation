@@ -19,13 +19,26 @@ A fully convolutional networks are generally divded into 3 parts, encoder layers
 
 I will start the discussion with encoder layers, initially each encoder layer consisted of a separable 2D convolution with a kernel size of 3, and a stride of 2 in both direction with same padding. While experimenting, I realised, as I increased the number of encoder and layers, the network started showing improvements, but it came with a drawback of increased training time, and changing the batch sizes showed quite a lot of variance as the network got larger, but because of limited resources on my laptop, batch sizes had to be decreased for larger models. After adding initial few layers, the network showed quite a bit of improvement, but after a point it started giving diminishing returns and required very high training time. A network similar to the FCN architecture (without a pretrained VGGNet) was giving a grade score slightly higher than 30%. So I decided to experiment a little with the architecture of each encoder layer, I started with adding an extra 1x1 convolution to each encoder layer before the separable 2D convolution of kernel size 3x3, and a smaller networks started showing much better results than FCN like model. I decided to experiment a bit with the inception module that was mentioned earlier in the course, so for each layer I added a 1x1 convolution for half the output filters and a 2D convolution with kernel size 3 and stride 1 for the other half, concatenated them used them as input for a 2D convolution with kernel size 3x3 and stride of 2. This showed a very significant improvement, and the network gave scores of more than 40%. 
 
+Each encoder layer
+![encoder](imgs/encoder.png)
+
 For the decoder layer, I initially just used bilinear upsampling and randomly placed 1 skip connection by concantenating the corresponding layer from encoder part, I later adjusted the skip connections to see better results. By seeing an improvement by using 1x1 convolutions while encoding, I decided to add that for the skip connections. This gave results much greater than 40%. 
+
+Each decoder layer
+![decoder](imgs/decoder.png)
 
 For final training I increased the batch size to 100, and trained for 50 epochs. I again played a little around with the hyperparameters while doing the final training on the server to get the best results. 
 
 For deciding the number of layers and filter sizes, I used the FCN8 network architecture as inspiration and tried the filter sizes in the powers of 2. While the final training on the server, I had to make a choice between increasing the number of encoder and decoder layers or increasing the batch size, since increasing the batch size was giving better results, I decided to go with that. 
 
 For skip connections, I experimented by adding them to all the later decoder layers, they were most rewarding for the decoder layers towards the end, except the last one, as the last one was adding a lot of noise.
+
+Final model
+![layers](imgs/model.png)
+
+Size of each layer
+![layers](imgs/layers.png)
+
 
 #### 3. Hyperparameters
 For parameter tuning, I ran quite a few experiments, I changed every parameter while keeping the others the same, and I experimented more with the parameters which were more rewarding when changed.
