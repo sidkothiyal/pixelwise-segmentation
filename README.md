@@ -1,2 +1,2 @@
 # pixelwise-segmentation
-Fully Convolutional Network based Segmentation
+Fully Convolutional Network based Pixelwise Segmentation 
